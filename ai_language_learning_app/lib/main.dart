@@ -1,3 +1,4 @@
+import 'package:ai_language_learning_app/config/themes/themes.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/pages/chat_page.dart';
 import 'package:flutter/material.dart';
 
@@ -12,11 +13,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      title: 'Language App',
+      theme: lightMode,
+      darkTheme: darkMode,
       home: const ChatPage(),
     );
   }
