@@ -20,16 +20,19 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
+      extendBody: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       resizeToAvoidBottomInset: true,
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            border: Border.all(color: Colors.white, width: 2),
-            borderRadius: BorderRadius.circular(24),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
           ),
+        ),
+        child: SafeArea(
           child: _buildBottomTextFild(_userInputController),
         ),
       ),
@@ -65,16 +68,24 @@ class _ChatPageState extends State<ChatPage> {
     return Row(
       children: [
         Expanded(
-          child: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: 'Write something...',
-              hintStyle: TextStyle(
-                color: const Color.fromARGB(255, 181, 181, 181),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 8.0,
+          child: IntrinsicHeight(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: TextField(
+                controller: controller,
+                maxLines: null,
+                decoration: InputDecoration(
+                  hintText: 'Write something...',
+                  hintStyle: TextStyle(
+                    color: const Color.fromARGB(255, 181, 181, 181),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                  ),
+                ),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
