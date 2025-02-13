@@ -23,19 +23,7 @@ class _ChatPageState extends State<ChatPage> {
       extendBody: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       resizeToAvoidBottomInset: true,
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          ),
-        ),
-        child: SafeArea(
-          child: _buildBottomTextFild(_userInputController),
-        ),
-      ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -64,7 +52,23 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  _buildBottomTextFild(TextEditingController controller) {
+  _buildBottomNavigationBar() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
+      ),
+      child: SafeArea(
+        child: _buildTextFild(),
+      ),
+    );
+  }
+
+  _buildTextFild() {
     return Row(
       children: [
         Expanded(
@@ -72,7 +76,7 @@ class _ChatPageState extends State<ChatPage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: TextField(
-                controller: controller,
+                controller: _userInputController,
                 maxLines: null,
                 decoration: InputDecoration(
                   hintText: 'Write something...',
