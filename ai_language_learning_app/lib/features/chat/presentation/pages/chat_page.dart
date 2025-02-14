@@ -1,3 +1,5 @@
+import 'package:ai_language_learning_app/features/chat/domain/entities/message_entity.dart';
+import 'package:ai_language_learning_app/features/chat/presentation/widgets/message.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
@@ -24,6 +26,25 @@ class _ChatPageState extends State<ChatPage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: _buildBottomNavigationBar(),
+      body: Column(
+        children: [
+          Message(
+            message: MessageEntity(
+              id: 1,
+              content: 'test',
+              isUserMessage: true,
+            ),
+          ),
+          Message(
+            message: MessageEntity(
+              id: 2,
+              content:
+                  'test 2 sdamskdmsakdmancxuuajijzijaijicasjciasjcoisajcoisajcoisajoicasjoidjoidjsaoida',
+              isUserMessage: false,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

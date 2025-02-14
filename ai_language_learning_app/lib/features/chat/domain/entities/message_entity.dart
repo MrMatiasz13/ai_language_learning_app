@@ -1,11 +1,11 @@
 class MessageEntity {
   final double id;
-  final String message;
+  final String content;
   final bool isUserMessage;
 
   MessageEntity({
     required this.id,
-    required this.message,
+    required this.content,
     required this.isUserMessage,
   });
 }
