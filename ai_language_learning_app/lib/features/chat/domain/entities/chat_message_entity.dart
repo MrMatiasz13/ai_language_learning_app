@@ -1,9 +1,9 @@
-class MessageEntity {
-  final double id;
+class ChatMessageEntity {
+  final int id;
   final String content;
   final bool isUserMessage;
 
-  MessageEntity({
+  ChatMessageEntity({
     required this.id,
     required this.content,
     required this.isUserMessage,

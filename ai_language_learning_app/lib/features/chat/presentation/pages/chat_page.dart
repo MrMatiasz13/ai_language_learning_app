@@ -1,4 +1,4 @@
-import 'package:ai_language_learning_app/features/chat/domain/entities/message_entity.dart';
+import 'package:ai_language_learning_app/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/cubits/chat_cubit.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/widgets/message.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  void sendMessage(BuildContext context, MessageEntity message) {
+  void sendMessage(BuildContext context, ChatMessageEntity message) {
     context.read<ChatCubit>().sendMessage(message);
     _userInputController.clear();
   }
@@ -121,7 +121,7 @@ class _ChatPageState extends State<ChatPage> {
           onPressed: () {
             sendMessage(
               context,
-              MessageEntity(
+              ChatMessageEntity(
                 id: 1,
                 content: _userInputController.text,
                 isUserMessage: true,

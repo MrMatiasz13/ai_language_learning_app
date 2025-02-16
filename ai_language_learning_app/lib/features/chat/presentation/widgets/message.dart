@@ -1,4 +1,4 @@
-import 'package:ai_language_learning_app/features/chat/domain/entities/message_entity.dart';
+import 'package:ai_language_learning_app/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter/material.dart';
 
 class Message extends StatelessWidget {
@@ -7,7 +7,7 @@ class Message extends StatelessWidget {
     required this.message,
   });
 
-  final MessageEntity message;
+  final ChatMessageEntity message;
 
   @override
   Widget build(BuildContext context) {
