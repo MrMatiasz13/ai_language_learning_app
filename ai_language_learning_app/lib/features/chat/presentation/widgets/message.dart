@@ -12,7 +12,7 @@ class Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
       child: Row(
         mainAxisAlignment: message.isUserMessage
             ? MainAxisAlignment.end
@@ -24,7 +24,9 @@ class Message extends StatelessWidget {
             ),
             padding: EdgeInsets.all(12.0),
             decoration: BoxDecoration(
-              color: Colors.grey.shade700,
+              color: message.isUserMessage
+                  ? Colors.grey.shade600
+                  : Colors.grey.shade800,
               borderRadius: BorderRadius.circular(12.0),
             ),
             child: Text(

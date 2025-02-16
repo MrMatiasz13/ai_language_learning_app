@@ -1,6 +1,8 @@
 import 'package:ai_language_learning_app/features/chat/domain/entities/message_entity.dart';
+import 'package:ai_language_learning_app/features/chat/presentation/cubits/chat_cubit.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/widgets/message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -18,32 +20,31 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
+  void sendMessage(BuildContext context, MessageEntity message) {
+    context.read<ChatCubit>().sendMessage(message);
+    _userInputController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final blocData = BlocProvider.of<ChatCubit>(context);
+    final messageList = context.read<ChatCubit>().messages;
+
     return Scaffold(
       appBar: _buildAppBar(),
       extendBody: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: _buildBottomNavigationBar(),
-      body: Column(
-        children: [
-          Message(
-            message: MessageEntity(
-              id: 1,
-              content: 'test',
-              isUserMessage: true,
-            ),
-          ),
-          Message(
-            message: MessageEntity(
-              id: 2,
-              content:
-                  'test 2 sdamskdmsakdmancxuuajijzijaijicasjciasjcoisajcoisajcoisajoicasjoidjoidjsaoida',
-              isUserMessage: false,
-            ),
-          ),
-        ],
+      body: BlocBuilder(
+        bloc: blocData,
+        builder: (context, state) {
+          return ListView.builder(
+            itemCount: messageList.length,
+            itemBuilder: (context, index) =>
+                Message(message: messageList[index]),
+          );
+        },
       ),
     );
   }
@@ -117,7 +118,16 @@ class _ChatPageState extends State<ChatPage> {
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            sendMessage(
+              context,
+              MessageEntity(
+                id: 1,
+                content: _userInputController.text,
+                isUserMessage: true,
+              ),
+            );
+          },
           icon: Icon(
             Icons.send,
             color: Colors.black,
