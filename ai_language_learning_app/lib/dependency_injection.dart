@@ -1,4 +1,4 @@
-import 'package:ai_language_learning_app/features/chat/data/data_source/app_database.dart';
+import 'package:ai_language_learning_app/features/chat/data/data_source/local/app_database.dart';
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;

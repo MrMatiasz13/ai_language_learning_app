@@ -1,6 +1,4 @@
-import 'package:ai_language_learning_app/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/cubits/chat_cubit.dart';
-import 'package:ai_language_learning_app/features/chat/presentation/widgets/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,15 +18,9 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  void sendMessage(BuildContext context, ChatMessageEntity message) {
-    context.read<ChatCubit>().sendMessage(message);
-    _userInputController.clear();
-  }
-
   @override
   Widget build(BuildContext context) {
     final blocData = BlocProvider.of<ChatCubit>(context);
-    final messageList = context.read<ChatCubit>().messages;
 
     return Scaffold(
       appBar: _buildAppBar(),
@@ -39,11 +31,7 @@ class _ChatPageState extends State<ChatPage> {
       body: BlocBuilder(
         bloc: blocData,
         builder: (context, state) {
-          return ListView.builder(
-            itemCount: messageList.length,
-            itemBuilder: (context, index) =>
-                Message(message: messageList[index]),
-          );
+          return Placeholder();
         },
       ),
     );
@@ -118,16 +106,7 @@ class _ChatPageState extends State<ChatPage> {
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: () {
-            sendMessage(
-              context,
-              ChatMessageEntity(
-                id: 1,
-                content: _userInputController.text,
-                isUserMessage: true,
-              ),
-            );
-          },
+          onPressed: () {},
           icon: Icon(
             Icons.send,
             color: Colors.black,

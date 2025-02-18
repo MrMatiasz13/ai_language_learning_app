@@ -1,10 +1,10 @@
 class ChatMessageEntity {
-  final int id;
+  int? id;
   final String content;
   final bool isUserMessage;
 
   ChatMessageEntity({
-    required this.id,
+    this.id,
     required this.content,
     required this.isUserMessage,
   });

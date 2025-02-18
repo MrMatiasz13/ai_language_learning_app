@@ -4,7 +4,10 @@ abstract class ChatState {}
 
 class InitialState extends ChatState {}
 
-class UpdateState extends ChatState {
-  final List<ChatMessageEntity> list;
-  UpdateState(this.list);
+class LoadingState extends ChatState {}
+
+class DoneState extends ChatState {
+  final List<ChatMessageEntity> messageList;
+
+  DoneState(this.messageList);
 }
