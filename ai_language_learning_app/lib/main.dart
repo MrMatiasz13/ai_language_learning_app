@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: lightMode,
       darkTheme: darkMode,
       home: BlocProvider(
-        create: (_) => ChatCubit(),
+        create: (_) => sl<ChatCubit>(),
         child: ChatPage(),
       ),
     );
