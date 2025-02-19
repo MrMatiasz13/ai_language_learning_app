@@ -1,4 +1,3 @@
-import 'package:ai_language_learning_app/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:ai_language_learning_app/features/chat/domain/usecases/get_messages_usecase.dart';
 import 'package:ai_language_learning_app/features/chat/domain/usecases/send_message_usecase.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/cubits/chat_state.dart';
@@ -13,11 +12,16 @@ class ChatCubit extends Cubit<ChatState> {
     this._sendMessageUsecase,
   ) : super(InitialState());
 
-  Future<List<ChatMessageEntity>> getMessages() async {
-    return await _getMessagesUsecase.call();
+  Future<void> fetchMessages() async {
+    emit(LoadingState());
+    final messages = await _getMessagesUsecase.call();
+    emit(DoneState(messages));
   }
 
   Future<void> sendMessage(String message) async {
+    emit(LoadingState());
     await _sendMessageUsecase.call(message);
+    final messages = await _getMessagesUsecase.call();
+    emit(DoneState(messages));
   }
 }

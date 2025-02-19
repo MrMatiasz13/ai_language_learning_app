@@ -2,19 +2,19 @@ import 'package:ai_language_learning_app/features/chat/domain/entities/chat_mess
 import 'package:flutter/material.dart';
 
 class Message extends StatelessWidget {
+  final ChatMessageEntity chatMessageEntity;
+
   const Message({
     super.key,
-    required this.message,
+    required this.chatMessageEntity,
   });
-
-  final ChatMessageEntity message;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
       child: Row(
-        mainAxisAlignment: message.isUserMessage
+        mainAxisAlignment: chatMessageEntity.isUserMessage
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
         children: [
@@ -24,13 +24,13 @@ class Message extends StatelessWidget {
             ),
             padding: EdgeInsets.all(12.0),
             decoration: BoxDecoration(
-              color: message.isUserMessage
+              color: chatMessageEntity.isUserMessage
                   ? Colors.grey.shade600
                   : Colors.grey.shade800,
               borderRadius: BorderRadius.circular(12.0),
             ),
             child: Text(
-              message.content,
+              chatMessageEntity.content,
               softWrap: true,
             ),
           ),
