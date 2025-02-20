@@ -1,6 +1,8 @@
 import 'package:ai_language_learning_app/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/cubits/chat_cubit.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/cubits/chat_state.dart';
+import 'package:ai_language_learning_app/features/chat/presentation/widgets/app_bar.dart';
+import 'package:ai_language_learning_app/features/chat/presentation/widgets/chat_text_field.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/widgets/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,37 +37,14 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: Aplicationbar(
+        title: Text('ChatBot'),
+      ),
       extendBody: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: _buildBottomNavigationBar(),
       body: _buildListView(),
-    );
-  }
-
-  _buildAppBar() {
-    return AppBar(
-      title: Text('ChatBot'),
-      centerTitle: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(1),
-        child: Container(
-          color: Theme.of(context).colorScheme.primary,
-          height: 1,
-        ),
-      ),
-      leading: IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.menu_rounded),
-      ),
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.add_box_outlined),
-        ),
-      ],
     );
   }
 
@@ -80,46 +59,11 @@ class _ChatPageState extends State<ChatPage> {
         ),
       ),
       child: SafeArea(
-        child: _buildTextFild(),
+        child: ChatTextField(
+          controller: _userInputController,
+          sendMessageVoid: _sendMessage,
+        ),
       ),
-    );
-  }
-
-  _buildTextFild() {
-    return Row(
-      children: [
-        Expanded(
-          child: IntrinsicHeight(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: TextField(
-                controller: _userInputController,
-                maxLines: null,
-                decoration: InputDecoration(
-                  hintText: 'Write something...',
-                  hintStyle: TextStyle(
-                    color: const Color.fromARGB(255, 181, 181, 181),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                  ),
-                ),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        IconButton(
-          onPressed: _sendMessage,
-          icon: Icon(
-            Icons.send,
-            color: Colors.black,
-          ),
-        ),
-      ],
     );
   }
 

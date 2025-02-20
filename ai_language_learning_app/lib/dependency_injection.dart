@@ -4,11 +4,15 @@ import 'package:ai_language_learning_app/features/chat/domain/repositories/datab
 import 'package:ai_language_learning_app/features/chat/domain/usecases/get_messages_usecase.dart';
 import 'package:ai_language_learning_app/features/chat/domain/usecases/send_message_usecase.dart';
 import 'package:ai_language_learning_app/features/chat/presentation/cubits/chat_cubit.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
+  // .env
+  await dotenv.load(fileName: ".env");
+
   // local database
   final database =
       await $FloorAppDatabase.databaseBuilder('app_database.db').build();
