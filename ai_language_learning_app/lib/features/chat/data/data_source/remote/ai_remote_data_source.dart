@@ -12,7 +12,7 @@ class AIRemoteDataSource {
   Future<String> fetchAIResponse(String prompt) async {
     try {
       final response = await _aiModel.generateContent([Content.text(prompt)]);
-      return response.text!;
+      return response.text ?? 'Empty response';
     } catch (e) {
       throw Exception('Ai model exception: $e');
     }

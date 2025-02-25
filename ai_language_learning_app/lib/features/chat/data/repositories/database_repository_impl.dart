@@ -1,6 +1,5 @@
 import 'package:ai_language_learning_app/core/mappers/message_mapper.dart';
 import 'package:ai_language_learning_app/features/chat/data/data_source/local/app_database.dart';
-import 'package:ai_language_learning_app/features/chat/data/models/chat_message_model.dart';
 import 'package:ai_language_learning_app/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:ai_language_learning_app/features/chat/domain/repositories/database_repository.dart';
 import 'package:flutter/foundation.dart';
@@ -20,12 +19,9 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<void> sendMessage(String message) async {
+  Future<void> sendMessage(ChatMessageEntity messageEntity) async {
     try {
-      final messageModel = ChatMessageModel(
-        content: message,
-        isUserMessage: true,
-      );
+      final messageModel = messageEntity.toModel();
 
       await _appDatabase.chatMessageDao.insertMessage(messageModel);
     } catch (e) {

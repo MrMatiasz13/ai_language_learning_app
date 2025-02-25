@@ -29,9 +29,14 @@ class _ChatPageState extends State<ChatPage> {
     context.read<ChatCubit>().fetchMessages();
   }
 
-  void _sendMessage() {
-    context.read<ChatCubit>().sendMessage(_userInputController.text);
-    _userInputController.clear();
+  void _sendMessage(ChatMessageEntity message) async {
+    await context.read<ChatCubit>().sendMessage(message);
+  }
+
+  Future<ChatMessageEntity> _getAIAnswer() async {
+    return await context
+        .read<ChatCubit>()
+        .getAIAnswer(_userInputController.text);
   }
 
   @override
@@ -61,7 +66,16 @@ class _ChatPageState extends State<ChatPage> {
       child: SafeArea(
         child: ChatTextField(
           controller: _userInputController,
-          sendMessageVoid: _sendMessage,
+          sendMessageVoid: () async {
+            final userMessage = ChatMessageEntity(
+              content: _userInputController.text,
+              isUserMessage: true,
+            );
+            _sendMessage(userMessage);
+
+            final answer = await _getAIAnswer();
+            _sendMessage(answer);
+          },
         ),
       ),
     );
