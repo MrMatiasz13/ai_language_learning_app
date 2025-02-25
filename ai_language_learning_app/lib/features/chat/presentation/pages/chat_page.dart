@@ -34,9 +34,10 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<ChatMessageEntity> _getAIAnswer() async {
-    return await context
-        .read<ChatCubit>()
-        .getAIAnswer(_userInputController.text);
+    final answer =
+        await context.read<ChatCubit>().getAIAnswer(_userInputController.text);
+
+    return answer;
   }
 
   @override
@@ -72,6 +73,8 @@ class _ChatPageState extends State<ChatPage> {
               isUserMessage: true,
             );
             _sendMessage(userMessage);
+
+            _userInputController.clear();
 
             final answer = await _getAIAnswer();
             _sendMessage(answer);

@@ -11,10 +11,10 @@ class AIModelRepositoryImpl implements AIModelRepository {
 
   @override
   Future<ChatMessageEntity> generateAnswer(String prompt) async {
-    final aiResponse = _aiDataSource.fetchAIResponse(prompt);
+    final aiResponse = await _aiDataSource.fetchAIResponse(prompt);
 
     final ChatMessageEntity aiMessage = ChatMessageModel(
-      content: aiResponse.toString(),
+      content: aiResponse,
       isUserMessage: false,
     ).toEntity();
 
