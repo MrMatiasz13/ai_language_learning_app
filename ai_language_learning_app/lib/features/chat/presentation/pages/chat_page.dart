@@ -33,9 +33,8 @@ class _ChatPageState extends State<ChatPage> {
     await context.read<ChatCubit>().sendMessage(message);
   }
 
-  Future<ChatMessageEntity> _getAIAnswer() async {
-    final answer =
-        await context.read<ChatCubit>().getAIAnswer(_userInputController.text);
+  Future<ChatMessageEntity> _getAIAnswer(String prompt) async {
+    final answer = await context.read<ChatCubit>().getAIAnswer(prompt);
 
     return answer;
   }
@@ -68,16 +67,19 @@ class _ChatPageState extends State<ChatPage> {
         child: ChatTextField(
           controller: _userInputController,
           sendMessageVoid: () async {
+            final userPrompt = _userInputController.text;
+
             final userMessage = ChatMessageEntity(
-              content: _userInputController.text,
+              content: userPrompt,
               isUserMessage: true,
             );
             _sendMessage(userMessage);
-
             _userInputController.clear();
 
-            final answer = await _getAIAnswer();
+            final answer = await _getAIAnswer(userPrompt);
             _sendMessage(answer);
+
+            _userInputController.clear();
           },
         ),
       ),
