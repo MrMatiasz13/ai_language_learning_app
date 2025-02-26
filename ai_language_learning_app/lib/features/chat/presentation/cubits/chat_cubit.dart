@@ -30,7 +30,6 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   Future<ChatMessageEntity> getAIAnswer(String prompt) async {
-    final answer = await _getAiAnswerUseCase.call(prompt);
-    return answer;
+    return await _getAiAnswerUseCase.call(prompt);
   }
 }

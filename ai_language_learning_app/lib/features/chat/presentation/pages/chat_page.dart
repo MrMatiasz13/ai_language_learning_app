@@ -22,12 +22,6 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     context.read<ChatCubit>().fetchMessages();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        scrollDown();
-      }
-    });
   }
 
   @override
@@ -37,31 +31,29 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  // scrolls list view to bottom
-  void scrollDown() {
-    if (_scrollController.hasClients) {
-      final maxExtent = _scrollController.position.maxScrollExtent;
-      final currentPosition = _scrollController.position.pixels;
-      print(
-          'Max Scroll Extent: $maxExtent, Current Position: $currentPosition');
+  void sendMessage(ChatMessageEntity message) async {
+    await context.read<ChatCubit>().sendMessage(message);
+  }
 
-      if (currentPosition < maxExtent) {
-        _scrollController
-            .animateTo(
-          maxExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        )
-            .then((_) {
-          if (_scrollController.position.pixels <
-              _scrollController.position.maxScrollExtent) {
-            scrollDown();
-          }
-        });
-      } else {
-        print('ScrollController not attached yet');
-      }
-    }
+  void chatWithAI() async {
+    final userPrompt = _userInputController.text;
+
+    final userMessage = ChatMessageEntity(
+      content: userPrompt,
+      isUserMessage: true,
+    );
+
+    sendMessage(userMessage);
+    _userInputController.clear();
+
+    final answer = await context.read<ChatCubit>().getAIAnswer(userPrompt);
+    sendMessage(answer);
+  }
+
+  Future<ChatMessageEntity> getAnswer() async {
+    return await context
+        .read<ChatCubit>()
+        .getAIAnswer(_userInputController.text);
   }
 
   @override
@@ -81,21 +73,20 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _buildChatList() {
-    return BlocConsumer<ChatCubit, ChatState>(
-      listener: (context, state) {
-        if (state is DoneState) {
-          scrollDown();
-        }
-      },
+    return BlocBuilder<ChatCubit, ChatState>(
       builder: (context, state) {
         if (state is DoneState) {
           return ListView.builder(
+            reverse: true,
             controller: _scrollController,
             itemCount: state.messageList.length,
             itemBuilder: (context, index) => Message(
               chatMessageEntity: ChatMessageEntity(
-                content: state.messageList[index].content,
-                isUserMessage: state.messageList[index].isUserMessage,
+                content: state
+                    .messageList[state.messageList.length - 1 - index].content,
+                isUserMessage: state
+                    .messageList[state.messageList.length - 1 - index]
+                    .isUserMessage,
               ),
             ),
           );
@@ -109,7 +100,7 @@ class _ChatPageState extends State<ChatPage> {
   _buildUserInput() {
     return ChatTextField(
       controller: _userInputController,
-      sendMessageVoid: () => scrollDown(),
+      sendMessageVoid: () => chatWithAI(),
     );
   }
 }
