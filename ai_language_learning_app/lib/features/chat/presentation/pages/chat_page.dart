@@ -16,81 +16,81 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final _userInputController = TextEditingController();
-
-  @override
-  void dispose() {
-    _userInputController.dispose();
-    super.dispose();
-  }
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     context.read<ChatCubit>().fetchMessages();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        scrollDown();
+      }
+    });
   }
 
-  void _sendMessage(ChatMessageEntity message) async {
-    await context.read<ChatCubit>().sendMessage(message);
+  @override
+  void dispose() {
+    _userInputController.dispose();
+    _scrollController.dispose();
+    super.dispose();
   }
 
-  Future<ChatMessageEntity> _getAIAnswer(String prompt) async {
-    final answer = await context.read<ChatCubit>().getAIAnswer(prompt);
+  // scrolls list view to bottom
+  void scrollDown() {
+    if (_scrollController.hasClients) {
+      final maxExtent = _scrollController.position.maxScrollExtent;
+      final currentPosition = _scrollController.position.pixels;
+      print(
+          'Max Scroll Extent: $maxExtent, Current Position: $currentPosition');
 
-    return answer;
+      if (currentPosition < maxExtent) {
+        _scrollController
+            .animateTo(
+          maxExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        )
+            .then((_) {
+          if (_scrollController.position.pixels <
+              _scrollController.position.maxScrollExtent) {
+            scrollDown();
+          }
+        });
+      } else {
+        print('ScrollController not attached yet');
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Aplicationbar(
-        title: Text('ChatBot'),
-      ),
-      extendBody: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      resizeToAvoidBottomInset: true,
-      bottomNavigationBar: _buildBottomNavigationBar(),
-      body: _buildListView(),
-    );
-  }
+      appBar: Aplicationbar(title: const Text('ChatBot')),
+      body: Column(
+        children: [
+          // chat list view
+          Expanded(child: _buildChatList()),
 
-  _buildBottomNavigationBar() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
-        ),
-      ),
-      child: SafeArea(
-        child: ChatTextField(
-          controller: _userInputController,
-          sendMessageVoid: () async {
-            final userPrompt = _userInputController.text;
-
-            final userMessage = ChatMessageEntity(
-              content: userPrompt,
-              isUserMessage: true,
-            );
-            _sendMessage(userMessage);
-            _userInputController.clear();
-
-            final answer = await _getAIAnswer(userPrompt);
-            _sendMessage(answer);
-
-            _userInputController.clear();
-          },
-        ),
+          // user input
+          _buildUserInput(),
+        ],
       ),
     );
   }
 
-  _buildListView() {
-    return BlocBuilder<ChatCubit, ChatState>(
+  _buildChatList() {
+    return BlocConsumer<ChatCubit, ChatState>(
+      listener: (context, state) {
+        if (state is DoneState) {
+          scrollDown();
+        }
+      },
       builder: (context, state) {
         if (state is DoneState) {
           return ListView.builder(
+            controller: _scrollController,
             itemCount: state.messageList.length,
             itemBuilder: (context, index) => Message(
               chatMessageEntity: ChatMessageEntity(
@@ -101,8 +101,15 @@ class _ChatPageState extends State<ChatPage> {
           );
         }
 
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       },
+    );
+  }
+
+  _buildUserInput() {
+    return ChatTextField(
+      controller: _userInputController,
+      sendMessageVoid: () => scrollDown(),
     );
   }
 }
