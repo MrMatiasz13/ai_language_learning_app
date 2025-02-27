@@ -24,6 +24,12 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<void> sendMessage(ChatMessageEntity message) async {
     emit(LoadingState());
+
+    if (state is DoneState) {
+      final currentMessages = (state as DoneState).messageList;
+      emit(DoneState([...currentMessages, message]));
+    }
+
     await _sendMessageUsecase.call(message);
     final messages = await _getMessagesUsecase.call();
     emit(DoneState(messages));

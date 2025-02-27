@@ -22,13 +22,23 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     context.read<ChatCubit>().fetchMessages();
+    _scrollController.addListener(() => scrollPosition());
   }
 
   @override
   void dispose() {
     _userInputController.dispose();
+    _scrollController.removeListener(scrollPosition);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  bool scrollPosition() {
+    if (_scrollController.position.pixels > 250) {
+      return true;
+    }
+
+    return false;
   }
 
   void sendMessage(ChatMessageEntity message) async {
@@ -50,16 +60,33 @@ class _ChatPageState extends State<ChatPage> {
     sendMessage(answer);
   }
 
-  Future<ChatMessageEntity> getAnswer() async {
-    return await context
-        .read<ChatCubit>()
-        .getAIAnswer(_userInputController.text);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Aplicationbar(title: const Text('ChatBot')),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.white,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Icon(Icons.arrow_downward_rounded),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           // chat list view

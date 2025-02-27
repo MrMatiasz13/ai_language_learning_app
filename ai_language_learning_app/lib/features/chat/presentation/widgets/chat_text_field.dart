@@ -17,7 +17,10 @@ class ChatTextField extends StatelessWidget {
         Expanded(
           child: IntrinsicHeight(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 16.0,
+              ),
               child: TextField(
                 controller: controller,
                 autofocus: true,
@@ -30,6 +33,13 @@ class ChatTextField extends StatelessWidget {
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 12.0,
                   ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(color: Colors.white, width: 2),
+                  ),
                 ),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -38,12 +48,11 @@ class ChatTextField extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 8),
         IconButton(
           onPressed: sendMessageVoid,
           icon: Icon(
             Icons.send,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
       ],
